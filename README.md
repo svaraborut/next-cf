@@ -5,3 +5,6 @@
 - ✅ Markdown
     - ✅ Rendering
     - Processing frontmatter
+- Images
+    - Optimization
+    - Static optimization
