@@ -1,0 +1,59 @@
+name: CloudFlare
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+    OUTPUT_DIR: .vercel/output/static
+    PUBLIC_URL: https://next.svara.io
+    CF_PROJECT_NAME: svara-test-next
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    name: Build and Publish
+    steps:
+
+      ### Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      ### Build Astro project
+      - name: NodeJs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 22
+
+      - name: Watermark
+        id: watermark
+        uses: svaraborut/watermark@v1
+        with:
+          format: 'BRANCH.SHA7 DATE'
+          auto-version: npm
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Build Next.js for CloudFlare
+        run: npm run pages:build
+        env:
+          NEXT_PUBLIC_WATERMARK: ${{ steps.watermark.outputs.watermark }}
+          NEXT_PUBLIC_URL: $PUBLIC_URL
+
+      ### Push project to cloudflare
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+            apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+            accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            command: pages deploy $OUTPUT_DIR --project-name=$CF_PROJECT_NAME
+            gitHubToken: ${{ secrets.GITHUB_TOKEN }}
