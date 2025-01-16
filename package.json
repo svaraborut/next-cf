@@ -6,13 +6,17 @@
         "dev": "next dev",
         "build": "next build",
         "pages:build": "npx --yes @cloudflare/next-on-pages",
-        "pages:preview": "wrangler pages dev .vercel/output/static"
+        "pages:preview": "wrangler pages dev .vercel/output/static",
+        "email:dev": "email dev"
     },
     "dependencies": {
+        "@aws-sdk/client-sesv2": "^3.729.0",
         "@mdx-js/loader": "^3.1.0",
         "@mdx-js/react": "^3.1.0",
         "@next/mdx": "^14.2.23",
         "@radix-ui/react-slot": "^1.1.1",
+        "@react-email/components": "^0.0.32",
+        "@reactit/hooks": "^0.1.16",
         "@tanstack/react-query": "^5.64.1",
         "@trpc/client": "^11.0.0-rc.700",
         "@trpc/next": "^11.0.0-rc.700",

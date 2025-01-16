@@ -1,6 +1,7 @@
 import { PickaxeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TrpcTime } from '@/components/TrpcTime'
+import { TrpcEmail } from '@/components/TrpcEmail'
 
 export default function Home() {
 	return (
@@ -14,6 +15,7 @@ export default function Home() {
 			</div>
 			<Button>Click Me</Button>
 			<TrpcTime />
+			<TrpcEmail />
 		</div>
 	)
 }

@@ -25,9 +25,9 @@
     - R2
     - Turnstile
     - Workers Analytics Engine
-- Emails
-    - Email Rendering
-    - AWS SES
+- ✅ Emails
+    - ✅ Email Rendering
+    - ✅ AWS SES
 - Crypto
 - ✅ Deployment
 
@@ -42,7 +42,7 @@ Specifically under Next 15 is not possible to use `renderToReadableStream` under
 creation of functionalities like rendering emails from React components. This may also be an issue during automated OG
 image creation. The related issues are:
 
-- [Next.js 15 `renderToReadableStream`](https://github.com/vercel/next.js/issues/71865)
+- [Next.js 15 renderToReadableStream](https://github.com/vercel/next.js/issues/71865)
 - [Missing function H error](https://github.com/vercel/next.js/issues/71004)
 - [React Email Issue](https://github.com/resend/react-email/issues/1630)
 - [Astro patching with react-dom/server -> react-tom/server.edge](https://github.com/facebook/react/issues/31827)
@@ -69,4 +69,21 @@ Then run the application in a production environment (use your OS to prevent Sql
 
 ```shell
 npm run pages:preview
+```
+
+## Emails
+
+Emails are sent via a separate AWS SES client which should be authenticated providing the following environment
+variables to the CloudFlare pages function:
+
+- `AWS_REGION`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+
+Emails are rendered from React templates using `@react-email/components` which imposes us to use [Next 14](#next-14).
+All email templates are created as React components and automatically rendered to HTML (and plain TXT) on edge via the
+send email function.
+
+```typescript
+await sendMail(TemplateOtp, input.to, { /* ... data ... */})
 ```
