@@ -38,7 +38,7 @@ jobs:
         id: watermark
         uses: svaraborut/watermark@v1
         with:
-          format: 'BRANCH.SHA7.BUILD DATE'
+          format: 'BRANCH.SHA7.RUN DATE'
           auto-version: npm
 
       - name: NPM Install
