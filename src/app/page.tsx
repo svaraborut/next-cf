@@ -2,6 +2,7 @@ import { PickaxeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TrpcTime } from '@/components/TrpcTime'
 import { TrpcEmail } from '@/components/TrpcEmail'
+import Link from 'next/link'
 
 export default function Home() {
 	return (
@@ -13,7 +14,14 @@ export default function Home() {
 					<pre>{process.env.NEXT_PUBLIC_WATERMARK}</pre>
 				</div>
 			</div>
-			<Button>Click Me</Button>
+			<div className='flex gap-2'>
+				<Button asChild>
+					<Link href='/tasks'>Tasks</Link>
+				</Button>
+				<Button asChild>
+					<Link href='/markdown'>Markdown</Link>
+				</Button>
+			</div>
 			<TrpcTime />
 			<TrpcEmail />
 		</div>

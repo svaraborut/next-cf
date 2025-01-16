@@ -1,3 +1,4 @@
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 import createMDX from '@next/mdx'
 import remarkGfm from 'remark-gfm'
 
@@ -16,3 +17,8 @@ const nextConfig = {
 }
 
 export default withMDX(nextConfig)
+
+// Initialize development env for wrangler with next.js
+if (process.env.NODE_ENV === 'development') {
+	setupDevPlatform({ persist: true }).catch((e) => console.error(e))
+}

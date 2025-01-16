@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server'
 import { sendMail } from '@/lib/mails'
 import { TemplateOtp } from '@/mails/TemplateOtp'
 import { Config } from '@/config'
+import { tasksRouter } from '@/server/tasks'
 
 export const appRouter = router({
 	time: procedure.query(async () => {
@@ -11,6 +12,7 @@ export const appRouter = router({
 			data: new Date()
 		}
 	}),
+	tasks: tasksRouter,
 	email: procedure
 		.input(z.object({ to: z.string().email(), code: z.string() }))
 		.mutation(async ({ input }) => {

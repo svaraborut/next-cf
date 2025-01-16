@@ -18,10 +18,10 @@
 - Images
     - Optimization
     - Static optimization
-- Drizzle
+- ✅ Drizzle
 - ✅ tRPC
-- Cloudflare
-    - D1
+- ✅ Cloudflare
+    - ✅ D1
     - R2
     - Turnstile
     - Workers Analytics Engine
@@ -69,6 +69,37 @@ Then run the application in a production environment (use your OS to prevent Sql
 
 ```shell
 npm run pages:preview
+```
+
+## Database
+
+Application is backed by a CloudFlare D1 database with a Drizzle orm connection that enables the system to run a full
+Sqlite database on edge. Connection and schema configuration is done in [lib/db](src/lib/db).
+
+Create a migration
+
+```shell
+drizzle-kit generate --name=...
+```
+
+Apply migrations to the local dev database
+
+```shell
+wrangler d1 migrations apply database --local
+```
+
+> [!TIP]
+> Theoretically is possible to use the `wrangler` action to automatically migrate D1 but this may be quite dangerous to
+> use in production therefore it has been omitted and migrations should be done manually from the developer terminal
+> prior to pushing the next version. A smarter approach would be to add a stage prior to the deployment that would check
+> the database is aligned with the current application being deployed and fail otherwise, but there seems to be no
+> command for that 😔
+
+When your wrangler file contains the correct `database_name` and `database_id` you can use this command to migrate the
+stage/production environment.
+
+```shell
+wrangler d1 migrations apply svara-test-next --remote
 ```
 
 ## Emails
