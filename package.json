@@ -13,6 +13,7 @@
     "@mdx-js/react": "^3.1.0",
     "@next/mdx": "^15.1.4",
     "@types/mdx": "^2.0.13",
+    "lucide-react": "^0.471.1",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

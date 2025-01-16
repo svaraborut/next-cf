@@ -7,7 +7,7 @@
 - ✅ Tailwind
 - ✅ SCSS
 - ✅ Embedded Google Fonts
-- Lucide Icons
+- ✅ Lucide Icons
 - ShadCn
 - Modern scrollbars
 - ✅ Markdown
