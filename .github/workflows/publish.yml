@@ -38,7 +38,7 @@ jobs:
         id: watermark
         uses: svaraborut/watermark@v1
         with:
-          format: 'BRANCH.SHA7 DATE'
+          format: 'BRANCH.SHA7.BUILD DATE'
           auto-version: npm
 
       - name: NPM Install
@@ -48,7 +48,7 @@ jobs:
         run: npm run pages:build
         env:
           NEXT_PUBLIC_WATERMARK: ${{ steps.watermark.outputs.watermark }}
-          NEXT_PUBLIC_URL: $PUBLIC_URL
+          NEXT_PUBLIC_URL: ${{ env.PUBLIC_URL }}
 
       ### Push project to cloudflare
       - name: Publish to Cloudflare Pages
