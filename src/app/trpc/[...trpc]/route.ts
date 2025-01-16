@@ -1,5 +1,6 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { appRouter } from '@/server'
+import { createContext } from '@/lib/trpc/server'
 
 export const runtime = 'edge'
 
@@ -9,7 +10,7 @@ async function handler(req: Request) {
 		endpoint: '/trpc',
 		req,
 		router: appRouter,
-		createContext: () => ({})
+		createContext
 	})
 }
 

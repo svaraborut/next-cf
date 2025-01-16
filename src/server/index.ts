@@ -13,6 +13,12 @@ export const appRouter = router({
 			data: new Date()
 		}
 	}),
+	geo: procedure.query(async ({ ctx }) => {
+		return {
+			geo: ctx.geo,
+			ip: ctx.ip
+		}
+	}),
 	tasks: tasksRouter,
 	email: procedure
 		.input(z.object({ to: z.string().email(), code: z.string() }))

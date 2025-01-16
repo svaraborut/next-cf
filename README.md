@@ -25,6 +25,7 @@
     - R2
     - Turnstile
     - 🚧 Workers Analytics Engine
+    - ✅ Geocodes
 - ✅ Emails
     - ✅ Email Rendering
     - ✅ AWS SES
@@ -33,7 +34,7 @@
 
 ## Next 14
 
-> [!WARNING]
+> [!CAUTION]
 > The project has been downgraded to Next 14 with React 18 as some of the features for email rendering will not work
 > under Next 15 as they have been removed and currently the team is working on a recover strategy that is not planned to
 > be implemented any time soon.
@@ -143,6 +144,12 @@ Data can be then read via their
 unofficial [SQL language](https://developers.cloudflare.com/analytics/analytics-engine/sql-reference/). Here are some
 query examples.
 
+Collect all data from a dataset:
+
+```sql
+SELECT * FROM svara_test_next
+```
+
 Collect all data of the last day divided by `action` and aggregate it for each hour. The result is a sparse dataset that
 may have holes and should still be reorganized by action:
 
@@ -156,3 +163,42 @@ FROM svara_test_next
 WHERE timestamp > NOW() - INTERVAL '1' DAY
 GROUP BY action, hour
 ```
+
+> [!TIP]
+> Note that CloudFlare Worker Analytics is an analytics processing engine, and therefore has an intrinsic ingestion
+> latency that is not publicly disclosed but have been observed to be around 1 minute. So don't panic if the data is not
+> available straight away.
+
+## Country code
+
+CloudFlare provides
+the [cf](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties)
+property inside Workers which include various useful properties. This feature has been integrated
+in [Next.js on Pages](https://github.com/cloudflare/next-on-pages/pull/101) in
+this [commit](https://github.com/cloudflare/next-on-pages/commit/5bd8e08660f4cfa9eba4421e6d0364b762aac81c) rendering
+some properties available in the `request.geo` property of Next. The final mapping is
+available [here](https://github.com/cloudflare/next-on-pages/blob/2cd4c3c704a00e6b693229f1f14102abc6318d11/packages/next-on-pages/templates/_worker.js/utils/request.ts#L22)
+What is available:
+
+| CloudFlare `cf`    | Next `geo`      | CloudFlare Description                                        |
+|--------------------|-----------------|---------------------------------------------------------------|
+| ❌ `asn`            |                 |                                                               |
+| ❌ `asOrganization` |                 |                                                               |
+| ❌ `colo`           |                 |                                                               |
+| ✅ `country`        | `geo.country`   | The two-letter country code in the request, for example, "US" |
+| ❌ `isEUCountry`    |                 |                                                               |
+| ✅ `city`           | `geo.city`      | City of the incoming request, for example, "Austin"           |
+| ❌ `continent`      |                 |                                                               |
+| ✅ `latitude`       | `geo.latitude`  | Latitude of the incoming request, for example, "30.27130"     |
+| ✅ `longitude`      | `geo.longitude` | Longitude of the incoming request, for example, "-97.74260"   |
+| ❌ `postalCode`     |                 |                                                               |
+| ❌ `metroCode`      |                 |                                                               |
+| ❌ `region`         |                 |                                                               |
+| ✅ `regionCode`     | `geo.region`    | The ISO 3166-2 ↗ code for the first-level region              |
+| ❌ `timezone`       |                 |                                                               |
+
+The `geo` and `ip` parameters have been rendered available to all tRPC requests via the default context.
+
+> [!TIP]
+> Other parameters are still available in the outer request but due to the Next.js manipulation of the request will be
+> quite tricky to extract them requesting the patching of `next-on-page` files and probably also Next.js itself.
