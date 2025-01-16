@@ -1,0 +1,5 @@
+.idea
+.next
+.vercel
+.wrangler
+node_modules/**
