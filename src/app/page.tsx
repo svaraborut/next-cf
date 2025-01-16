@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { TrpcTime } from '@/components/TrpcTime'
 import { TrpcEmail } from '@/components/TrpcEmail'
 import Link from 'next/link'
+import { TrpcAnalytics } from '@/components/TrpcAnalytics'
 
 export default function Home() {
 	return (
@@ -24,6 +25,7 @@ export default function Home() {
 			</div>
 			<TrpcTime />
 			<TrpcEmail />
+			<TrpcAnalytics />
 		</div>
 	)
 }

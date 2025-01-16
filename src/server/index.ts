@@ -5,6 +5,7 @@ import { sendMail } from '@/lib/mails'
 import { TemplateOtp } from '@/mails/TemplateOtp'
 import { Config } from '@/config'
 import { tasksRouter } from '@/server/tasks'
+import { analyticsRouter } from '@/server/analytics'
 
 export const appRouter = router({
 	time: procedure.query(async () => {
@@ -25,7 +26,8 @@ export const appRouter = router({
 					url: Config.resolveUrl('/markdown')
 				})
 			}
-		})
+		}),
+	analyticsRouter
 })
 
 // export type definition of API

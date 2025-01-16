@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { z } from 'zod'
 import { tasksTable } from '@/lib/db/schema'
 import { asc, desc, eq } from 'drizzle-orm'
+import { logTasksAction } from '@/server/analytics'
 
 export const ZodTasksId = z.object({ id: z.number() })
 export const ZodTasksRead = z.object({
@@ -32,6 +33,7 @@ export const tasksRouter = router({
 			.orderBy(input.direction === 'forward' ? asc(tasksTable.id) : desc(tasksTable.id))
 			.limit(input.limit + 1)
 			.offset(input.cursor)
+		logTasksAction('read', Math.min(items.length, input.limit))
 		return {
 			items: items.slice(0, input.limit),
 			nextCursor: items.length >= input.limit ? input.cursor + items.length : undefined
@@ -42,6 +44,7 @@ export const tasksRouter = router({
 	 */
 	create: procedure.input(ZodTasksCreate).mutation(async ({ input }) => {
 		await db.insert(tasksTable).values(input)
+		logTasksAction('create', 1)
 	}),
 	/**
 	 * Update an existing task
@@ -51,6 +54,7 @@ export const tasksRouter = router({
 			.update(tasksTable)
 			.set({ done: input.done, text: input.text })
 			.where(eq(tasksTable.id, input.id))
+		logTasksAction('update', 1)
 	}),
 	/**
 	 * Batch update up to 50 tasks (only done flag can be changed)
@@ -60,12 +64,14 @@ export const tasksRouter = router({
 			db.update(tasksTable).set({ done: r.done }).where(eq(tasksTable.id, r.id))
 		)
 		await db.batch(ops as any)
+		logTasksAction('update', ops.length)
 	}),
 	/**
 	 * Delete a single task
 	 */
 	delete: procedure.input(ZodTasksId).mutation(async ({ input }) => {
 		await db.delete(tasksTable).where(eq(tasksTable.id, input.id))
+		logTasksAction('delete', 1)
 	}),
 	/**
 	 * Batch delete up to 50 tasks
@@ -73,5 +79,6 @@ export const tasksRouter = router({
 	deleteBatch: procedure.input(ZodTasksDeleteBatch).mutation(async ({ input }) => {
 		const ops = input.map((r) => db.delete(tasksTable).where(eq(tasksTable.id, r.id)))
 		await db.batch(ops as any)
+		logTasksAction('delete', ops.length)
 	})
 })

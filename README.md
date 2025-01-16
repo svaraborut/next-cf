@@ -24,7 +24,7 @@
     - ✅ D1
     - R2
     - Turnstile
-    - Workers Analytics Engine
+    - 🚧 Workers Analytics Engine
 - ✅ Emails
     - ✅ Email Rendering
     - ✅ AWS SES
@@ -117,4 +117,42 @@ send email function.
 
 ```typescript
 await sendMail(TemplateOtp, input.to, { /* ... data ... */})
+```
+
+## Worker Analytics Engine
+
+This system supports Worker Analytics for system analysis and to display data to the user. Cloudflare provides write and
+read wia two separate [systems](https://developers.cloudflare.com/analytics/analytics-engine/get-started/), the first is
+a binding that should be configured via the dashboard (and wrangler) and the second is a public API that requires an API
+token.
+
+For writing create a `AYD` binding to an Analytics Dataset and then use the `aed?.writeDataPoint()` function. THIS
+BINDING IS NOT AVAILABLE VIA THE LOCAL DEVELOPMENT ENVIRONMENT AND THE `aed` OBJECT MAY BE `undefined`. With this
+functionality both system and application metrics can be logged.
+
+In case of application metrics the metrics should also
+be [read by the Worker](https://developers.cloudflare.com/analytics/analytics-engine/worker-querying/) which is achieved
+directly via `fetch` using the public API. The following environment variables to the CloudFlare pages function:
+
+- `AED_ACCOUNT_ID` CloudFlare account it
+- `AED_API_TOKEN` a generic Token with `Account Analytics` `Read` permissions (yes CloudFlare has no granularity on this
+  one)
+- `AED_DATASET` not required, but used by this project to not hardcode the dataset
+
+Data can be then read via their
+unofficial [SQL language](https://developers.cloudflare.com/analytics/analytics-engine/sql-reference/). Here are some
+query examples.
+
+Collect all data of the last day divided by `action` and aggregate it for each hour. The result is a sparse dataset that
+may have holes and should still be reorganized by action:
+
+```sql
+SELECT
+    blob1 AS action,
+    toStartOfInterval(timestamp, INTERVAL '1' HOUR) hour,
+    SUM(double1) as count,
+    SUM(_sample_interval) as samples
+FROM svara_test_next
+WHERE timestamp > NOW() - INTERVAL '1' DAY
+GROUP BY action, hour
 ```

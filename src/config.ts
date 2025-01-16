@@ -21,5 +21,12 @@ export const Config = {
 		region: process.env.AWS_REGION!,
 		keyId: process.env.AWS_ACCESS_KEY_ID!,
 		keySecret: process.env.AWS_SECRET_ACCESS_KEY!
+	},
+
+	// Worker Analytics Engine
+	wae: {
+		accountId: process.env.AED_ACCOUNT_ID!,
+		apiToken: process.env.AED_API_TOKEN!,
+		dataset: process.env.AED_DATASET!
 	}
 }

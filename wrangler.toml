@@ -6,3 +6,7 @@ binding = "DB"
 database_name = "svara-test-next"
 database_id = "64e87a91-37d9-4bf7-9464-d182ec4fa03b"
 migrations_dir = "migrations"
+
+[[analytics_engine_datasets]]
+binding = "AYD"
+dataset = "svara_test_next"
