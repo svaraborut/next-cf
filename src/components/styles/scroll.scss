@@ -1,0 +1,37 @@
+/**
+ * Borut Svara 2025-01-11
+ * Custom scrollbar, which uses ShadCN variables to custom style
+ * all the scrollbars in the application to a modern look.
+ * todo : scrollbar-gutter stable
+ */
+
+$scroll-gap: 2px;
+$scroll-width: 8px;
+
+::-webkit-scrollbar {
+    background: transparent;
+    height: calc($scroll-width + $scroll-gap * 2);
+    width: calc($scroll-width + $scroll-gap * 2);
+}
+
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: hsl(var(--border));
+    // There are two possible approaches to add the $scroll-gap.
+    // Where (1) is more generic, as it does not require knowledge
+    // of the background color but is less supported whereas (2) is
+    // generic but requires knowledge of the background color making
+    // it tedious when working with different backgrounds.
+    // (1) https://docs.astro.build/
+    background-clip: content-box;
+    border: $scroll-gap solid transparent;
+    // (2) inspired by Google Calendar
+    // border: $scroll-gap solid hsl(var(--background));
+    -webkit-border-radius: calc($scroll-width / 2 + $scroll-gap);
+    border-radius: calc($scroll-width / 2 + $scroll-gap);
+}

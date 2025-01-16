@@ -9,7 +9,7 @@
 - ✅ Embedded Google Fonts
 - ✅ Lucide Icons
 - ✅ ShadCn
-- Modern scrollbars
+- ✅ Modern scrollbars
 - ✅ Markdown
     - ✅ Rendering
     - Processing frontmatter
