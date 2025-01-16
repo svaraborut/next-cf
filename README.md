@@ -19,7 +19,7 @@
     - Optimization
     - Static optimization
 - Drizzle
-- tRPC
+- ✅ tRPC
 - Cloudflare
     - D1
     - R2

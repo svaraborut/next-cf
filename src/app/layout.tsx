@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Body } from '@/components/Body'
 import { ReactNode } from 'react'
+import TRPCProvider from '@/lib/trpc/client'
 
 export const metadata: Metadata = {
 	title: 'CloudFlare',
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<Body>{children}</Body>
+			<TRPCProvider>
+				<Body>{children}</Body>
+			</TRPCProvider>
 		</html>
 	)
 }
