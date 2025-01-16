@@ -5,7 +5,7 @@
 - ✅ Linting
 - ✅ TypeScript
 - ✅ Tailwind
-- SCSS
+- ✅ SCSS
 - ✅ Embedded Google Fonts
 - Lucide Icons
 - ShadCn
