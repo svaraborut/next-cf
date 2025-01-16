@@ -31,6 +31,22 @@
 - Crypto
 - ✅ Deployment
 
+## Next 14
+
+> [!WARNING]
+> The project has been downgraded to Next 14 with React 18 as some of the features for email rendering will not work
+> under Next 15 as they have been removed and currently the team is working on a recover strategy that is not planned to
+> be implemented any time soon.
+
+Specifically under Next 15 is not possible to use `renderToReadableStream` under any route, rendering impossible the
+creation of functionalities like rendering emails from React components. This may also be an issue during automated OG
+image creation. The related issues are:
+
+- [Next.js 15 `renderToReadableStream`](https://github.com/vercel/next.js/issues/71865)
+- [Missing function H error](https://github.com/vercel/next.js/issues/71004)
+- [React Email Issue](https://github.com/resend/react-email/issues/1630)
+- [Astro patching with react-dom/server -> react-tom/server.edge](https://github.com/facebook/react/issues/31827)
+
 ## Deploy
 
 > [!IMPORTANT]

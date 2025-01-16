@@ -1,13 +1,14 @@
 import { HTMLAttributes } from 'react'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Roboto, Roboto_Mono } from 'next/font/google'
 import './styles/globals.scss'
 
-const geistSans = Geist({
+const geistSans = Roboto({
 	variable: '--font-geist-sans',
-	subsets: ['latin']
+	subsets: ['latin'],
+	weight: '400'
 })
 
-const geistMono = Geist_Mono({
+const geistMono = Roboto_Mono({
 	variable: '--font-geist-mono',
 	subsets: ['latin']
 })
