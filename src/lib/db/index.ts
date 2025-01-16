@@ -7,7 +7,7 @@ function initDbConnection() {
 	if (process.env.NODE_ENV === 'development') {
 		return drizzle((getRequestContext().env as any).DB, { schema })
 	} else {
-		return drizzle(process.env.DB, { schema })
+		return drizzle(process.env.DB as any, { schema })
 	}
 }
 
