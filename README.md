@@ -8,7 +8,7 @@
 - ✅ SCSS
 - ✅ Embedded Google Fonts
 - ✅ Lucide Icons
-- ShadCn
+- ✅ ShadCn
 - Modern scrollbars
 - ✅ Markdown
     - ✅ Rendering
