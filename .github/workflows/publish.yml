@@ -8,6 +8,7 @@ on:
 permissions:
   contents: read
 
+## https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables
 env:
     OUTPUT_DIR: .vercel/output/static
     PUBLIC_URL: https://next.svara.io
@@ -55,5 +56,5 @@ jobs:
         with:
             apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
             accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-            command: pages deploy $OUTPUT_DIR --project-name=$CF_PROJECT_NAME
+            command: pages deploy ${{ env.OUTPUT_DIR }} --project-name=${{ env.CF_PROJECT_NAME }}
             gitHubToken: ${{ secrets.GITHUB_TOKEN }}

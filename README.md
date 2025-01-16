@@ -29,6 +29,7 @@
     - Email Rendering
     - AWS SES
 - Crypto
+- ✅ Deployment
 
 ## Deploy
 
