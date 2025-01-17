@@ -33,7 +33,7 @@
 - Crypto
 - ✅ [Deployment](#deploy)
 
-## Next 14
+## 🔼 Next 14
 
 > [!CAUTION]
 > The project has been downgraded to Next 14 with React 18 as some of the features for email rendering will not work
@@ -49,12 +49,14 @@ image creation. The related issues are:
 - [React Email Issue](https://github.com/resend/react-email/issues/1630)
 - [Astro patching with react-dom/server -> react-tom/server.edge](https://github.com/facebook/react/issues/31827)
 
-## Assets
+> [!CAUTION]
+> There is currently also no [stable support](https://ui.shadcn.com/docs/react-19#recharts) by ShadCN for React 19
+
+## 📦 Assets
 
 This project has many moving parts and require careful configuration and attention not to expose secrets. Here is a
 complete part of all parts involved into a complete deployment.
 
-This project has many moving parts and require careful configuration and attention not to expose secrets.
 ### Resources
 
 | Item                        | Current                                 |
@@ -87,7 +89,7 @@ This project has many moving parts and require careful configuration and attenti
 | AED_API_TOKEN                  | CloudFlare API Key for Worker Analytics Read | CloudFlare Secret   | ⚠️ |
 | AED_DATASET                    | CloudFlare Worker Analytics dataset name     | CloudFlare Variable |    |
 
-## Deploy
+## 🚀 Deploy
 
 > [!IMPORTANT]
 > Deployment is completely managed by the [GitHub Action](.github/workflows/publish.yml). This document illustrates how
@@ -111,7 +113,7 @@ Then run the application in a production environment (use your OS to prevent Sql
 npm run pages:preview
 ```
 
-## Database
+## 📁 Database
 
 Application is backed by a CloudFlare D1 database with a Drizzle orm connection that enables the system to run a full
 Sqlite database on edge. Connection and schema configuration is done in [lib/db](src/lib/db).
@@ -143,6 +145,7 @@ wrangler d1 migrations apply svara-test-next --remote
 ```
 
 ## Turnstile
+## 🔒 Turnstile
 
 To protect unauthenticated endpoints/actions from DDOS and abuse
 use [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/). To enable the system just create a Turnstile
@@ -151,7 +154,7 @@ widget via the interface and provide:
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` secret to the GitHub action (embedded at build time)
 - `TURNSTILE_SECRET_KEY` secret to Cloudflare Pages Functions
 
-## Emails
+## ✉️ Emails
 
 Emails are sent via a separate AWS SES client which should be authenticated providing the following environment
 variables to the CloudFlare pages function:
@@ -168,7 +171,7 @@ send email function.
 await sendMail(TemplateOtp, input.to, { /* ... data ... */})
 ```
 
-## Worker Analytics Engine
+## 📈 Worker Analytics Engine
 
 This system supports Worker Analytics for system analysis and to display data to the user. Cloudflare provides write and
 read wia two separate [systems](https://developers.cloudflare.com/analytics/analytics-engine/get-started/), the first is
@@ -218,6 +221,7 @@ GROUP BY action, hour
 > available straight away.
 
 ## Geocodes
+## 🌍 Geocodes
 
 CloudFlare provides
 the [cf](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties)
