@@ -248,12 +248,17 @@ the [retention limit](https://developers.cloudflare.com/analytics/analytics-engi
 
 CloudFlare provides
 the [cf](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties)
-property inside Workers which include various useful properties. This feature has been integrated
-in [Next.js on Pages](https://github.com/cloudflare/next-on-pages/pull/101) in
+property inside Workers which include various useful properties.
+
+> [!TIP]
+> All CloudFlare parameters are available via the `getRequestContext()` function as described
+> [here](https://github.com/cloudflare/next-on-pages/tree/main/packages/next-on-pages#cloudflare-platform-integration)
+
+This feature has been integrated in [Next.js on Pages](https://github.com/cloudflare/next-on-pages/pull/101) in
 this [commit](https://github.com/cloudflare/next-on-pages/commit/5bd8e08660f4cfa9eba4421e6d0364b762aac81c) rendering
 some properties available in the `request.geo` property of Next. The final mapping is
 available [here](https://github.com/cloudflare/next-on-pages/blob/2cd4c3c704a00e6b693229f1f14102abc6318d11/packages/next-on-pages/templates/_worker.js/utils/request.ts#L22)
-What is available:
+The lookup is:
 
 | CloudFlare `cf`    | Next `geo`      | CloudFlare Description                                        |
 |--------------------|-----------------|---------------------------------------------------------------|

@@ -17,7 +17,8 @@ export const appRouter = router({
 	geo: procedure.query(async ({ ctx }) => {
 		return {
 			geo: ctx.geo,
-			ip: ctx.ip
+			ip: ctx.ip,
+			cf: ctx.cf
 		}
 	}),
 	tasks: tasksRouter,
