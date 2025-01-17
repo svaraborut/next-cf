@@ -52,6 +52,28 @@ image creation. The related issues are:
 - [React Email Issue](https://github.com/resend/react-email/issues/1630)
 - [Astro patching with react-dom/server -> react-tom/server.edge](https://github.com/facebook/react/issues/31827)
 
+## Variables
+
+This project has many moving parts and require careful configuration and attention not to expose secrets.
+
+| Name                           | Purpose                                      | Type                |    |
+|--------------------------------|----------------------------------------------|---------------------|----|
+| CLOUDFLARE_ACCOUNT_ID          | CloudFlare Account Id                        | GitHub Secret       |    |
+| CLOUDFLARE_API_TOKEN           | CloudFlare API Key to publish Pages          | GitHub Secret       | ⚠️ |
+| NEXT_PUBLIC_ENV                | Enable development environment               | Dev                 |    |
+| NEXT_PUBLIC_WATERMARK          | App build watermark                          | GitHub Env          | 🔓 |
+| NEXT_PUBLIC_URL                | App build public URL                         | GitHub Env          | 🔓 |
+| DB                             | CloudFlare D1 Binding                        | CloudFlare Binding  |    |
+| NEXT_PUBLIC_TURNSTILE_SITE_KEY | CloudFlare Turnstile Site Key                | GitHub Secret       | 🔓 |
+| TURNSTILE_SECRET_KEY           | CloudFlare Turnstile Secret Key              | CloudFlare Secret   | ⚠️ |
+| AWS_REGION                     | AWS SES Region                               | CloudFlare Variable |    |
+| AWS_ACCESS_KEY_ID              | AWS SET Key ID                               | CloudFlare Variable |    |
+| AWS_SECRET_ACCESS_KEY          | AWS SES Access Key                           | CloudFlare Secret   | ⚠️ |
+| AYD                            | CloudFlare Worker Analytics Binding          | CloudFlare Binding  |    |
+| AED_ACCOUNT_ID                 | CloudFlare Account Id                        | CloudFlare Variable |    |
+| AED_API_TOKEN                  | CloudFlare API Key for Worker Analytics Read | CloudFlare Secret   | ⚠️ |
+| AED_DATASET                    | CloudFlare Worker Analytics dataset name     | CloudFlare Variable |    |
+
 ## Deploy
 
 > [!IMPORTANT]
