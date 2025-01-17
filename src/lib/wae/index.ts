@@ -3,9 +3,7 @@ import { Config } from '@/config'
 
 function initAedConnection(): AnalyticsEngineDataset | undefined {
 	const aed =
-		process.env.NODE_ENV === 'development'
-			? (getRequestContext().env as any).DB
-			: (process.env.AYD as unknown as AnalyticsEngineDataset)
+		process.env.NODE_ENV === 'development' ? getRequestContext().env.AYD : process.env.AYD
 	// It seems that in local development mode this utility is not working
 	return typeof aed?.writeDataPoint === 'function' ? aed : undefined
 }

@@ -35,7 +35,7 @@ export default function Page() {
 				Verify Token
 			</Button>
 			<Turnstile
-				siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+				siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
 				onSuccess={(token) => setToken(token)}
 				onExpire={() => setToken(undefined)}
 				onError={(e) => setToken(undefined)}
