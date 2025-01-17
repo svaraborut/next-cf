@@ -173,6 +173,7 @@ export function TrpcAnalytics() {
 							/>
 							{series.map((se) => (
 								<Area
+									isAnimationActive={false}
 									key={se.key}
 									dataKey={se.key}
 									type='linear'
