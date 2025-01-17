@@ -12,6 +12,7 @@ declare global {
 		AED_ACCOUNT_ID: string
 		AED_API_TOKEN: string
 		AED_DATASET: string
+		FEATURE_SECRET: string
 	}
 }
 

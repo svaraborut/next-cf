@@ -26,7 +26,7 @@ export const appRouter = router({
 		.input(z.object({ to: z.string().email(), code: z.string() }))
 		.mutation(async ({ input }) => {
 			// todo : add turnstyle
-			if (input.code !== 'AYjIERHbjWgjAIuo') {
+			if (input.code !== process.env.FEATURE_SECRET) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' })
 			} else {
 				await sendMail(TemplateOtp, input.to, {
