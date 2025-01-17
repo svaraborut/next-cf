@@ -49,9 +49,25 @@ image creation. The related issues are:
 - [React Email Issue](https://github.com/resend/react-email/issues/1630)
 - [Astro patching with react-dom/server -> react-tom/server.edge](https://github.com/facebook/react/issues/31827)
 
-## Variables
+## Assets
+
+This project has many moving parts and require careful configuration and attention not to expose secrets. Here is a
+complete part of all parts involved into a complete deployment.
 
 This project has many moving parts and require careful configuration and attention not to expose secrets.
+### Resources
+
+| Item                        | Current                                 |
+|-----------------------------|-----------------------------------------|
+| GitHub Action               | `https://github.com/svaraborut/next-cf` |
+| Domain                      | `next.svara.io`                         |
+| CloudFlare Page             | `svara-test-next`                       |
+| CloudFlare D1               | `svara-test-next`                       |
+| CloudFlare Turnstile        | `svara-test-next`                       |
+| CloudFlare Worker Analytics | `svara_test_next`                       |
+| AWS Simple Email Service    | `test@axelered.com`                     |
+
+### Variables
 
 | Name                           | Purpose                                      | Type                |    |
 |--------------------------------|----------------------------------------------|---------------------|----|
