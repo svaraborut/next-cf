@@ -18,7 +18,7 @@
 - Images
     - Optimization
     - Static optimization
-- ✅ [Drizzle](#database)
+- ✅ [Drizzle](#-database)
 - ✅ tRPC
 - ✅ Cloudflare
     - ✅ [D1](#database)
@@ -26,12 +26,27 @@
     - ✅ [Turnstile](#turnstile)
     - ✅ [Workers Analytics Engine](#worker-analytics-engine)
     - ✅ [Geocodes](#geocodes)
+    - ✅ [D1](#-database)
+    - ✅ [Turnstile](#-turnstile)
+    - ✅ [Workers Analytics Engine](#-worker-analytics-engine)
+    - ✅ [Geocodes](#-geocodes)
     - 🍭 Cache
-- ✅ [Emails](#emails)
+- ✅ [Emails](#-emails)
     - ✅ Email Rendering
     - ✅ AWS SES
 - Crypto
-- ✅ [Deployment](#deploy)
+- ✅ [Deployment](#-deploy)
+
+## ⚠️ Migrate to Workers
+
+> [!WARNING]
+> This solution uses CloudFlare Pages via `@cloudflare/next-on-pages`. As pointed out on the Discord channel CloudFlare
+> is deprecating pages in favour of a (still in beta) Workers
+> based  [solution](https://developers.cloudflare.com/workers/frameworks/framework-guides/nextjs/). This solution
+> leverages a completely different
+> package [`@opennextjs/cloudflare](https://www.npmjs.com/package/@opennextjs/cloudflare) to bundle the app and deploy
+> it to workers. This approach despite being still in beta should support more features including Cron and Queue
+> Consumers.
 
 ## 🔼 Next 14
 
@@ -145,6 +160,7 @@ wrangler d1 migrations apply svara-test-next --remote
 ```
 
 ## Turnstile
+
 ## 🔒 Turnstile
 
 To protect unauthenticated endpoints/actions from DDOS and abuse
