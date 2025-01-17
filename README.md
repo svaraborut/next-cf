@@ -18,19 +18,23 @@
 - Images
     - Optimization
     - Static optimization
-- ✅ Drizzle
+- ✅ [Drizzle](#database)
 - ✅ tRPC
 - ✅ Cloudflare
-    - ✅ D1
+    - ✅ [D1](#database)
     - R2
     - Turnstile
     - 🚧 Workers Analytics Engine
     - ✅ Geocodes
 - ✅ Emails
+    - 🚧 [Workers Analytics Engine](#worker-analytics-engine)
+    - ✅ [Geocodes](#geocodes)
+    - 🍭 Cache
+- ✅ [Emails](#emails)
     - ✅ Email Rendering
     - ✅ AWS SES
 - Crypto
-- ✅ Deployment
+- ✅ [Deployment](#deploy)
 
 ## Next 14
 
@@ -169,7 +173,7 @@ GROUP BY action, hour
 > latency that is not publicly disclosed but have been observed to be around 1 minute. So don't panic if the data is not
 > available straight away.
 
-## Country code
+## Geocodes
 
 CloudFlare provides
 the [cf](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties)
