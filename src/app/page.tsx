@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { TrpcTime } from '@/components/TrpcTime'
 import { TrpcEmail } from '@/components/TrpcEmail'
 import Link from 'next/link'
-import { TrpcAnalytics } from '@/components/TrpcAnalytics'
 import { TrpcGeo } from '@/components/TrpcGeo'
 
 export default function Home() {
@@ -30,7 +29,6 @@ export default function Home() {
 			<TrpcTime />
 			<TrpcGeo />
 			<TrpcEmail />
-			<TrpcAnalytics />
 		</div>
 	)
 }

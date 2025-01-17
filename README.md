@@ -24,7 +24,7 @@
     - ✅ [D1](#database)
     - R2
     - ✅ [Turnstile](#turnstile)
-    - 🚧 [Workers Analytics Engine](#worker-analytics-engine)
+    - ✅ [Workers Analytics Engine](#worker-analytics-engine)
     - ✅ [Geocodes](#geocodes)
     - 🍭 Cache
 - ✅ [Emails](#emails)
@@ -202,17 +202,21 @@ SELECT * FROM svara_test_next
 ```
 
 Collect all data of the last day divided by `action` and aggregate it for each hour. The result is a sparse dataset that
-may have holes and should still be reorganized by action:
+may have holes and should still be reorganized by action (see `waeTranspose`).
+
+> [!TIP]
+> Note that for consistency and ease of processing the `timestamp` is registered to a hour multiple since the `UNIX`
+> which may not register correctly with users in other timezones. If this is a problem additional timezone analytics
+> registration can be added where a timezone offset is added to the query and to `waeTranspose`.
 
 ```sql
 SELECT
-    blob1 AS action,
-    toStartOfInterval(timestamp, INTERVAL '1' HOUR) hour,
-    SUM(double1) as count,
-    SUM(_sample_interval) as samples
+    intDiv(toUInt32(timestamp), 3600) * 3600 AS t,
+    blob1 AS a,
+    SUM(double1) as c
 FROM svara_test_next
-WHERE timestamp > NOW() - INTERVAL '1' DAY
-GROUP BY action, hour
+WHERE toUInt32(timestamp) > toUInt32(NOW()) - 5184000
+GROUP BY t, a
 ```
 
 > [!TIP]
@@ -220,7 +224,10 @@ GROUP BY action, hour
 > latency that is not publicly disclosed but have been observed to be around 1 minute. So don't panic if the data is not
 > available straight away.
 
-## Geocodes
+The analytics result is then converted from sparse matrix to a dense time-series matrix using `waeTranspose` and
+rendered to the user via ShadCN Charts. This process supports up to 90 days in the past as this is
+the [retention limit](https://developers.cloudflare.com/analytics/analytics-engine/limits/) imposed by CloudFlare.
+
 ## 🌍 Geocodes
 
 CloudFlare provides
