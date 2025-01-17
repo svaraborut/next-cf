@@ -7,12 +7,22 @@ import { r2 } from '@/lib/r2/index'
 
 export class UploadError extends Error {}
 
-export interface FileOptions {
+export interface FileUploadOptions {
 	maxSize: number
 	formats: { mime: string; ext: string }[]
 }
 
-export async function fileUpload(key: string, req: Request, options: FileOptions) {
+export interface FileUploadReturn {
+	key: string
+	mime: string
+	ext: string
+}
+
+export async function fileUpload(
+	key: string,
+	req: Request,
+	options: FileUploadOptions
+): Promise<FileUploadReturn> {
 	if (!key) {
 		throw new UploadError('Key cannot be empty')
 	}
@@ -61,16 +71,23 @@ export async function fileUpload(key: string, req: Request, options: FileOptions
 	// https://developers.cloudflare.com/r2/api/workers/workers-api-reference/#bucket-method-definitions
 	await r2.put(key, materializedFile, putOptions)
 	// Produce final key
-	return `${key}${fmt.ext}`
+	return { key, ...fmt }
+}
+
+export interface FileDownloadOptions extends FileUploadOptions {
+	download?: boolean
+	fuzzyExtension?: boolean
+	cacheMaxAge?: number
+	cachePublic?: boolean
 }
 
 export async function fileDownload(
 	slug: string,
-	options: FileOptions & { download?: boolean }
+	options: FileDownloadOptions
 ): Promise<Response | undefined> {
 	// slug may optionally end with a format suffix
 	const fmt = options.formats.find((fmt) => slug.toLowerCase().endsWith(fmt.ext))
-	const key = fmt ? slug.slice(0, slug.length - fmt.ext.length) : slug
+	const key = options.fuzzyExtension && fmt ? slug.slice(0, slug.length - fmt.ext.length) : slug
 	if (!slug) {
 		throw new UploadError('Key cannot be empty')
 	}
@@ -80,19 +97,24 @@ export async function fileDownload(
 	if (!res) {
 		return undefined
 	}
+	// Define the final format
 	const remoteMime = res.httpMetadata?.contentType
 	if (fmt && remoteMime && remoteMime !== fmt.mime) {
-		throw new UploadError(
-			`File type mismatch. Requested ${fmt.mime} but files is ${remoteMime}`
-		)
+		throw new UploadError(`File type mismatch. Requested ${fmt.mime} but file is ${remoteMime}`)
 	}
-	// Prepare disposition
+	const outFmt = fmt ?? options.formats.find((fmt) => fmt.mime === remoteMime)
+	// Headers
+	const headers: any = {
+		'content-disposition': `${options.download ? 'attachment' : 'inline'}; filename="file${outFmt?.ext ?? ''}"`
+	}
+	// Caching https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+	if (options.cacheMaxAge) {
+		headers['cache-control'] =
+			`max-age=${options.cacheMaxAge}, ${options.cachePublic ? 'public' : 'private'}`
+	}
+	if (outFmt?.mime) {
+		headers['content-type'] = outFmt.mime
+	}
 	// Stream download
-	return new Response(res.body as any, {
-		status: 200,
-		headers: {
-			'content-type': remoteMime ?? 'text/plain',
-			'content-disposition': `${options.download ? 'attachment' : 'inline'}; filename="file${fmt?.ext ?? ''}"`
-		}
-	})
+	return new Response(res.body as any, { status: 200, headers })
 }

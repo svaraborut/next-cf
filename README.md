@@ -175,6 +175,17 @@ huge memory allocation. With <10MB files seems smarter to materialize the file a
 classes. The process would require manual processing of the data stream with some way to retrieve the instance of the
 FixedLengthStream that is a CF builtin class.
 
+The `fileDownload` function supports caching, and can be enabled via `cacheMaxAge` and `cachePublic` which will expose a
+standard `cache-control: max-age=N, public` header to be then handled by any front proxy or CDN.
+
+> [!TIP]
+> The system stores files with the plain key but provides the possibility to the user to read them with their extension
+> name (example `.png`) via the `fuzzyExtension` option. But this does not align with the public CDN url which does
+> expose the plain key as url. When using the public CDN the system should either store the files with their extension
+> or accept raw keys as the public URL as browsers fully support reading files without extension. Furthermore, the
+> function provides the `content-type` header. this may only become a problem if some strange SEO policies are taking
+> into account the file extension (but is unlikely).
+
 ### 🚧 Signed URLs
 
 > [!TIP]

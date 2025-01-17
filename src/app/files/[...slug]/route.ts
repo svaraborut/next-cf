@@ -1,4 +1,4 @@
-import { fileDownload, FileOptions, fileUpload, UploadError } from '@/lib/r2/files'
+import { fileDownload, fileUpload, FileUploadOptions, UploadError } from '@/lib/r2/files'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'edge'
@@ -12,7 +12,7 @@ const options = {
 		{ mime: 'text/plain', ext: '.txt' },
 		{ mime: 'application/pdf', ext: '.pdf' }
 	]
-} satisfies FileOptions
+} satisfies FileUploadOptions
 
 interface RouteParams {
 	params: { slug: string[] }
@@ -27,9 +27,15 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
 	const { slug } = params
 	try {
-		console.log(`👆 ${slug} ${typeof slug}`)
-		const url = await fileUpload(slug.join('/'), req, options)
-		return NextResponse.json({ status: 'ok', url: `${process.env.NEXT_PUBLIC_URL_CDN}/${url}` })
+		// console.log(`👆 ${slug}`)
+		const file = await fileUpload(slug.join('/'), req, options)
+		return NextResponse.json({
+			status: 'ok',
+			urls: [
+				`${process.env.NEXT_PUBLIC_URL_CDN}/${file.key}`,
+				`${process.env.NEXT_PUBLIC_URL_CDN}/${file.key}${file.ext}`
+			]
+		})
 	} catch (e) {
 		if (e instanceof UploadError) {
 			return NextResponse.json({ status: 'error', message: e.message }, { status: 400 })
@@ -46,10 +52,13 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 export async function GET(req: NextRequest, { params }: RouteParams) {
 	const { slug } = params
 	try {
-		console.log(`👇 ${slug}`)
+		// console.log(`👇 ${slug}`)
 		const res = await fileDownload(slug.join('/'), {
 			...options,
-			download: req.nextUrl.searchParams.has('dw')
+			download: req.nextUrl.searchParams.has('dw'),
+			fuzzyExtension: true,
+			cacheMaxAge: 300, // 5min
+			cachePublic: true
 		})
 		if (res) {
 			return res
