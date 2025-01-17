@@ -22,7 +22,7 @@
 - ✅ tRPC
 - ✅ Cloudflare
     - ✅ [D1](#-database)
-    - R2
+    - 🚧 [R2](#-storage)
     - ✅ [Turnstile](#-turnstile)
     - ✅ [Workers Analytics Engine](#-worker-analytics-engine)
     - ✅ [Geocodes](#-geocodes)
@@ -77,8 +77,10 @@ complete part of all parts involved into a complete deployment.
 |-----------------------------|-----------------------------------------|
 | GitHub Action               | `https://github.com/svaraborut/next-cf` |
 | Domain                      | `next.svara.io`                         |
+| Domain                      | `cdnext.svara.io`                       |
 | CloudFlare Page             | `svara-test-next`                       |
 | CloudFlare D1               | `svara-test-next`                       |
+| CloudFlare R2               | `svara-test-next`                       |
 | CloudFlare Turnstile        | `svara-test-next`                       |
 | CloudFlare Worker Analytics | `svara_test_next`                       |
 | AWS Simple Email Service    | `test@axelered.com`                     |
@@ -92,6 +94,7 @@ complete part of all parts involved into a complete deployment.
 | NEXT_PUBLIC_ENV                | Enable development environment               | Dev                 |    |
 | NEXT_PUBLIC_WATERMARK          | App build watermark                          | GitHub Env          | 🔓 |
 | NEXT_PUBLIC_URL                | App build public URL                         | GitHub Env          | 🔓 |
+| NEXT_PUBLIC_URL_CDN            | App build R2 bucket public URL               | GitHub Env          | 🔓 |
 | DB                             | CloudFlare D1 Binding                        | CloudFlare Binding  |    |
 | NEXT_PUBLIC_TURNSTILE_SITE_KEY | CloudFlare Turnstile Site Key                | GitHub Secret       | 🔓 |
 | TURNSTILE_SECRET_KEY           | CloudFlare Turnstile Secret Key              | CloudFlare Secret   | ⚠️ |
@@ -157,6 +160,29 @@ stage/production environment.
 ```shell
 wrangler d1 migrations apply svara-test-next --remote
 ```
+
+## 🪣 Storage
+
+The project support R2 Read & Write via Worker wit additional support to upload and download files via custom `route.ts`
+APIs, that will limit the possible MIME types and the file size to 1MB.
+
+> [!CAUTION]
+> The system is streaming file DOWNLOAD but is not streaming file UPLOAD.
+
+Stream API does not support stream reading `FormData` and therefore no efficient method to do so has been found.
+Manually processing the stream is a complex task that may only be worth the effort if files are very large, to prevent
+huge memory allocation. With <10MB files seems smarter to materialize the file and delegate data copy to OS optimized
+classes. The process would require manual processing of the data stream with some way to retrieve the instance of the
+FixedLengthStream that is a CF builtin class.
+
+### 🚧 Signed URLs
+
+> [!TIP]
+> CloudFlare in its
+> [official documentation](https://developers.cloudflare.com/r2/api/s3/presigned-urls/#presigned-url-alternative-with-workers)
+> admits not to support the fully featured S3 standard `POST` but claims that using a Worker with its Binding for upload
+> is fully equivalent to a pre-signed URL. This should imply that using a Worker with the stream interface adds
+> close-to-no overhead and can then be used as a replacement for the upload.
 
 ## 🔒 Turnstile
 

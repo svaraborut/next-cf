@@ -22,6 +22,7 @@ declare global {
 			NEXT_PUBLIC_ENV: 'development' | undefined
 			NEXT_PUBLIC_WATERMARK: string
 			NEXT_PUBLIC_URL: string
+			NEXT_PUBLIC_URL_CDN: string
 			NEXT_PUBLIC_TURNSTILE_SITE_KEY: string
 		}
 	}

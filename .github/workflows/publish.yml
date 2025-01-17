@@ -12,6 +12,7 @@ permissions:
 env:
     OUTPUT_DIR: .vercel/output/static
     PUBLIC_URL: https://next.svara.io
+    PUBLIC_URL_CDN: https://cdnext.svara.io
     CF_PROJECT_NAME: svara-test-next
 
 jobs:
@@ -49,6 +50,7 @@ jobs:
         env:
           NEXT_PUBLIC_WATERMARK: ${{ steps.watermark.outputs.watermark }}
           NEXT_PUBLIC_URL: ${{ env.PUBLIC_URL }}
+          NEXT_PUBLIC_URL_CDN: ${{ env.PUBLIC_URL_CDN }}
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
 
       ### Push project to cloudflare
