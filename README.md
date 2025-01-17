@@ -21,11 +21,6 @@
 - ✅ [Drizzle](#-database)
 - ✅ tRPC
 - ✅ Cloudflare
-    - ✅ [D1](#database)
-    - R2
-    - ✅ [Turnstile](#turnstile)
-    - ✅ [Workers Analytics Engine](#worker-analytics-engine)
-    - ✅ [Geocodes](#geocodes)
     - ✅ [D1](#-database)
     - ✅ [Turnstile](#-turnstile)
     - ✅ [Workers Analytics Engine](#-worker-analytics-engine)
@@ -159,8 +154,6 @@ stage/production environment.
 wrangler d1 migrations apply svara-test-next --remote
 ```
 
-## Turnstile
-
 ## 🔒 Turnstile
 
 To protect unauthenticated endpoints/actions from DDOS and abuse
@@ -277,8 +270,4 @@ The lookup is:
 | ✅ `regionCode`     | `geo.region`    | The ISO 3166-2 ↗ code for the first-level region              |
 | ❌ `timezone`       |                 |                                                               |
 
-The `geo` and `ip` parameters have been rendered available to all tRPC requests via the default context.
-
-> [!TIP]
-> Other parameters are still available in the outer request but due to the Next.js manipulation of the request will be
-> quite tricky to extract them requesting the patching of `next-on-page` files and probably also Next.js itself.
+The `geo`, `cf` and `ip` parameters have been rendered available to all tRPC requests via the default context.
