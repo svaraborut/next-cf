@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@aws-sdk/client-sesv2": "^3.729.0",
+        "@marsidev/react-turnstile": "^1.1.0",
         "@mdx-js/loader": "^3.1.0",
         "@mdx-js/react": "^3.1.0",
         "@next/mdx": "^14.2.23",

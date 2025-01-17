@@ -23,10 +23,7 @@
 - ✅ Cloudflare
     - ✅ [D1](#database)
     - R2
-    - Turnstile
-    - 🚧 Workers Analytics Engine
-    - ✅ Geocodes
-- ✅ Emails
+    - ✅ [Turnstile](#turnstile)
     - 🚧 [Workers Analytics Engine](#worker-analytics-engine)
     - ✅ [Geocodes](#geocodes)
     - 🍭 Cache
@@ -128,6 +125,15 @@ stage/production environment.
 ```shell
 wrangler d1 migrations apply svara-test-next --remote
 ```
+
+## Turnstile
+
+To protect unauthenticated endpoints/actions from DDOS and abuse
+use [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/). To enable the system just create a Turnstile
+widget via the interface and provide:
+
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` secret to the GitHub action (embedded at build time)
+- `TURNSTILE_SECRET_KEY` secret to Cloudflare Pages Functions
 
 ## Emails
 

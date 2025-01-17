@@ -23,6 +23,9 @@ export default function Home() {
 				<Button asChild>
 					<Link href='/markdown'>Markdown</Link>
 				</Button>
+				<Button asChild>
+					<Link href='/secured'>Secured</Link>
+				</Button>
 			</div>
 			<TrpcTime />
 			<TrpcGeo />

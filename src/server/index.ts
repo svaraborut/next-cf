@@ -6,6 +6,7 @@ import { TemplateOtp } from '@/mails/TemplateOtp'
 import { Config } from '@/config'
 import { tasksRouter } from '@/server/tasks'
 import { analyticsRouter } from '@/server/analytics'
+import { verifyTurnstile } from '@/lib/turnstile'
 
 export const appRouter = router({
 	time: procedure.query(async () => {
@@ -33,7 +34,12 @@ export const appRouter = router({
 				})
 			}
 		}),
-	analyticsRouter
+	analyticsRouter,
+	turnstileCheck: procedure.input(z.object({ token: z.string() })).mutation(async ({ input }) => {
+		const ok = await verifyTurnstile(input.token)
+		if (!ok) throw new TRPCError({ code: 'UNAUTHORIZED' })
+		return true
+	})
 })
 
 // export type definition of API
