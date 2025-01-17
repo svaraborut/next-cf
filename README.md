@@ -22,10 +22,14 @@
 - ✅ tRPC
 - ✅ Cloudflare
     - ✅ [D1](#-database)
+    - R2
     - ✅ [Turnstile](#-turnstile)
     - ✅ [Workers Analytics Engine](#-worker-analytics-engine)
     - ✅ [Geocodes](#-geocodes)
     - 🍭 Cache
+    - 🍭 Fingerprint
+    - 🍭 Cron
+    - 🍭 Queue
 - ✅ [Emails](#-emails)
     - ✅ Email Rendering
     - ✅ AWS SES
