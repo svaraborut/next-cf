@@ -33,7 +33,8 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 			status: 'ok',
 			urls: [
 				`${process.env.NEXT_PUBLIC_URL_CDN}/${file.key}`,
-				`${process.env.NEXT_PUBLIC_URL_CDN}/${file.key}${file.ext}`
+				`${process.env.NEXT_PUBLIC_URL}/files/${file.key}`,
+				`${process.env.NEXT_PUBLIC_URL}/files/${file.key}${file.ext}`
 			]
 		})
 	} catch (e) {

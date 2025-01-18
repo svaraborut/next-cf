@@ -25,6 +25,9 @@ export default function Home() {
 				<Button asChild>
 					<Link href='/secured'>Secured</Link>
 				</Button>
+				<Button asChild>
+					<Link href='/images'>Images</Link>
+				</Button>
 			</div>
 			<TrpcTime />
 			<TrpcGeo />
