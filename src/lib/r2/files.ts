@@ -110,7 +110,7 @@ export async function fileDownload(
 	// Caching https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
 	if (options.cacheMaxAge) {
 		headers['cache-control'] =
-			`max-age=${options.cacheMaxAge}, ${options.cachePublic ? 'public' : 'private'}`
+			`${options.cachePublic ? 'public' : 'private'}, max-age=${options.cacheMaxAge}`
 	}
 	if (outFmt?.mime) {
 		headers['content-type'] = outFmt.mime

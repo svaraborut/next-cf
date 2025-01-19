@@ -25,6 +25,7 @@
     - 🚧 [R2](#-storage)
     - ✅ [Turnstile](#-turnstile)
     - ✅ [Workers Analytics Engine](#-worker-analytics-engine)
+    - ✅ [Caching](#-caching)
     - ✅ [Geocodes](#-geocodes)
     - 🍭 Cache
     - 🍭 Fingerprint
@@ -280,6 +281,31 @@ GROUP BY t, a
 The analytics result is then converted from sparse matrix to a dense time-series matrix using `waeTranspose` and
 rendered to the user via ShadCN Charts. This process supports up to 90 days in the past as this is
 the [retention limit](https://developers.cloudflare.com/analytics/analytics-engine/limits/) imposed by CloudFlare.
+
+## 💾 Caching
+
+It is important to note that by default Cloudflare
+does [only cache some file extensions](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/#default-cached-file-extensions)
+and **does so by actual extension and not MIME type**. This implies that the application despite serving cacheable MIME
+types and/or correctly formed `cache-control` headers, unless the URL ends with an explicit extension like `.jpg` the
+cache will always be skipped (inspect the `cf-cache-status` header).
+
+To properly setup caching explicit Caching Rules should be set up in Cloudflare. Such rules explains to Cloudflare how
+to behave under various caching conditions. For this setup the following rules have been created, to support the desired
+application behaviour:
+
+- `test_next_cdn_cache`: This rule cache **all requests** served by `cdnext.svara.io` for 2 hours as this is not done by
+  default. As an additional improvement the query keys are ignored (they are not used by R2) preventing cache punching
+  attacks and de existence of many copies of the same asset.
+- `test_next_files_cache`: This rule marks as **eligible for caching** all the `next.svara.io/files/*` endpoints by
+  respecting the provided `cache-control` header or using the default 4 hours caching period if the header is absent.
+  Note that **Browser TTL** should be set to `Respect original TTL` to forward through the server issued `cache-control`
+  otherwise Cloudflare will override it to
+  the [default 2 hours](https://developers.cloudflare.com/cache/how-to/edge-browser-cache-ttl/#browser-cache-ttl)
+
+> [!CAUTION]
+> Note that the rules also caches all `>400` responses which in turn will yield 404 results for assets that were visited
+> shortly prior to their upload. This can be fixed by removing caching of such codes.
 
 ## 🌍 Geocodes
 
