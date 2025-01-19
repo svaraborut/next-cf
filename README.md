@@ -35,6 +35,8 @@
     - ✅ AWS SES
 - Crypto
 - ✅ [Deployment](#-deploy)
+    - ⚠️ No static calls `getRequestContext`
+    - ⚠️ Check if `process.env` is ok
 
 ## ⚠️ Migrate to Workers
 
@@ -105,6 +107,7 @@ complete part of all parts involved into a complete deployment.
 | AED_ACCOUNT_ID                 | CloudFlare Account Id                        | CloudFlare Variable |    |
 | AED_API_TOKEN                  | CloudFlare API Key for Worker Analytics Read | CloudFlare Secret   | ⚠️ |
 | AED_DATASET                    | CloudFlare Worker Analytics dataset name     | CloudFlare Variable |    |
+| FEATURE_SECRET                 | App API key for some of the features         | CloudFlare Secret   | ⚠️ |
 
 ## 🚀 Deploy
 
