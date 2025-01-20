@@ -62,7 +62,7 @@ export async function fileUpload(
 		}
 		// Ok here we are safe enough to materialize the file and upload it
 		// todo : stop materializing, todo arrayBuffer() is not working
-		materializedFile = (await req.blob()) as any
+		materializedFile = req.body as any
 	} else {
 		// Read form data
 		let formData: FormData
