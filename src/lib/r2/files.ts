@@ -31,6 +31,10 @@ export interface FileUploadReturn extends FileReturn {
 	mime: string
 }
 
+// (!) There is a bug under wrangler where R2 will not work with streams.
+// We should then materialize all stuff when working in development
+const shouldMaterialize = process.env.NEXT_PUBLIC_ENV === 'development'
+
 /**
  * Directly upload a file from an incoming Form POST request to R2. The request
  * should be a plain POST/PUT request or a FormData request containing a single
@@ -52,7 +56,7 @@ export async function fileUpload(
 		throw new UploadError(`Too large, maximum allowed size is ${options.maxSize}`)
 	}
 	// Read input
-	let materializedFile: ArrayBuffer, fmt: FileFormat | undefined
+	let toUpload: any, fmt: FileFormat | undefined
 	if (!options.formData) {
 		// Read plain request
 		const reqMime = req.headers.get('content-type')
@@ -60,9 +64,8 @@ export async function fileUpload(
 		if (!fmt) {
 			throw new UploadError(`Cannot upload MIME type ${reqMime}`)
 		}
-		// Ok here we are safe enough to materialize the file and upload it
-		// todo : stop materializing, todo arrayBuffer() is not working
-		materializedFile = req.body as any
+		// Get data
+		toUpload = shouldMaterialize ? req.arrayBuffer() : req.body
 	} else {
 		// Read form data
 		let formData: FormData
@@ -87,9 +90,8 @@ export async function fileUpload(
 		} else if (file.size > options.maxSize) {
 			throw new UploadError(`Too large, maximum allowed size is ${options.maxSize}`)
 		}
-		// Ok here we are safe enough to materialize the file and upload it
-		// todo : stop materializing
-		materializedFile = await file.arrayBuffer()
+		// Get data todo : test
+		toUpload = shouldMaterialize ? await file.arrayBuffer() : file.stream()
 	}
 	// https://developers.cloudflare.com/r2/api/workers/workers-api-reference/#r2putoptions
 	const putOptions = {
@@ -102,7 +104,7 @@ export async function fileUpload(
 		// }
 	} satisfies R2PutOptions
 	// https://developers.cloudflare.com/r2/api/workers/workers-api-reference/#bucket-method-definitions
-	await r2.put(key, materializedFile, putOptions)
+	await r2.put(key, toUpload, putOptions)
 	// Produce final key
 	return { key, ...fmt }
 }
@@ -178,17 +180,31 @@ export async function fileDownload(
 	})
 }
 
+export interface FileCopyOptions {
+	targetShouldNotExist?: boolean
+}
+
 /**
  * Copy the file at source key to the destination key
- * todo : check target does not exist
  */
-export async function fileCopy(keyFrom: string, keyTo: string): Promise<FileReturn> {
+export async function fileCopy(
+	keyFrom: string,
+	keyTo: string,
+	options?: FileCopyOptions
+): Promise<FileReturn> {
+	// Guard
+	if (options?.targetShouldNotExist) {
+		const resTo = await r2.head(keyTo)
+		if (resTo) {
+			throw new FileError(`Object ${keyTo} already exists`)
+		}
+	}
+	// Move the data
 	const res = await r2.get(keyFrom)
 	if (!res) {
-		throw new FileError('File not found')
+		throw new FileError(`Object ${keyFrom} not found`)
 	}
-	// todo : stop materializing
-	await r2.put(keyTo, await res.arrayBuffer(), {
+	await r2.put(keyTo, shouldMaterialize ? await res.arrayBuffer() : res.body, {
 		httpMetadata: res.httpMetadata,
 		customMetadata: res.customMetadata
 	})
@@ -201,8 +217,12 @@ export async function fileCopy(keyFrom: string, keyTo: string): Promise<FileRetu
 /**
  * Move the file from source key to the destination key
  */
-export async function fileMove(keyFrom: string, keyTo: string): Promise<FileReturn> {
-	const res = await fileCopy(keyFrom, keyTo)
+export async function fileMove(
+	keyFrom: string,
+	keyTo: string,
+	options?: FileCopyOptions
+): Promise<FileReturn> {
+	const res = await fileCopy(keyFrom, keyTo, options)
 	await r2.delete(keyFrom)
 	return res
 }

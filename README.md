@@ -171,19 +171,20 @@ The project support R2 Read & Write via Worker wit additional support to upload 
 APIs, that will limit the possible MIME types and the file size to 1MB.
 
 The system supports direct file upload via `PUT` request (like S3 API) without any conversion to form encoding. This is
-easier to validate on the backend and should be easier to extend in the future.
-
-> [!CAUTION]
-> The system is streaming file DOWNLOAD but is not streaming file UPLOAD. THIS IS A BUG UNDER ACTIVE INVESTIGATION
-
-Stream API does not support stream reading `FormData` and therefore no efficient method to do so has been found.
-Manually processing the stream is a complex task that may only be worth the effort if files are very large, to prevent
-huge memory allocation. With <10MB files seems smarter to materialize the file and delegate data copy to OS optimized
-classes. The process would require manual processing of the data stream with some way to retrieve the instance of the
-FixedLengthStream that is a CF builtin class.
+easier to validate on the backend and should be easier to extend in the future. Stream API does not support stream
+reading `FormData` and therefore it is not an efficient method to use prefer direct file uploads. The system fully
+supports streaming of upload requests when `FormData` is **not** used. _Note that due to a bug in `wrangler` requests
+must be materialized when in development mode._
 
 The `fileDownload` function supports caching, and can be enabled via `cacheMaxAge` and `cachePublic` which will expose a
-standard `cache-control: max-age=N, public` header to be then handled by any front proxy or CDN.
+standard `cache-control: max-age=N, public` header to be then handled by any front proxy or CDN. It is also possible to
+enable different cache logics like `cacheNoStore` and `cacheMustRevalidate`.
+
+| Setting                     | `cache-control`                  |
+|-----------------------------|----------------------------------|
+| `cacheNoStore`              | `no-store`                       |
+| `cacheMustRevalidate`       | `no-cache, must-revalidate`      |
+| `cacheMaxAge` `cachePublic` | `{public\|private}, max-age={N}` |
 
 > [!TIP]
 > The system stores files with the plain key but provides the possibility to the user to read them with their extension
