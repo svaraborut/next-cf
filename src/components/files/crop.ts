@@ -91,13 +91,16 @@ export async function imageCropRotate({
 	}
 
 	// Calculate bounding box of the rotated image
+	// todo : (!) Large images will load, and can also be rendered on small canvases but
+	//  attempting to use a large canvas https://stackoverflow.com/questions/6081483
+	//  we should avoid using this proxy canvas and directly draw on a small one
 	const rotRad = (rotation * Math.PI) / 180
 	canvas.width =
 		Math.abs(Math.cos(rotRad) * image.width) + Math.abs(Math.sin(rotRad) * image.height)
 	canvas.height =
 		Math.abs(Math.sin(rotRad) * image.width) + Math.abs(Math.cos(rotRad) * image.height)
 
-	// Clear canvas
+	// Clear canvas. This does not work, moved to croppedCtx
 	// ctx.fillStyle = background ?? '#000'
 	// ctx.fillRect(0, 0, canvas.width, canvas.height)
 

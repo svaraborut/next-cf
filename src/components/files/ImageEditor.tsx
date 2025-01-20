@@ -176,7 +176,6 @@ export function ImageEditor({ aspect, onImageChange, background = '#000' }: Imag
 					onClick={async () => {
 						const pixels = ref.current?.getCropData()
 						if (!image || !pixels) return
-						// todo : resize
 						const blob = await imageCropRotate({
 							image,
 							crop: pixels.croppedAreaPixels,

@@ -16,11 +16,10 @@ export default function HomePage() {
 
 	const task = useAsync(async () => {
 		if (!key || !code || !blob) throw new Error('Missing data')
-		const form = new FormData()
-		form.append('file', blob)
+		// Use direct post strategy
 		const res = await fetch(`/files/${key}`, {
-			method: 'POST',
-			body: form,
+			method: 'PUT',
+			body: blob,
 			headers: {
 				authorization: `Bearer ${code}`
 			}

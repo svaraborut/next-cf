@@ -170,8 +170,11 @@ wrangler d1 migrations apply svara-test-next --remote
 The project support R2 Read & Write via Worker wit additional support to upload and download files via custom `route.ts`
 APIs, that will limit the possible MIME types and the file size to 1MB.
 
+The system supports direct file upload via `PUT` request (like S3 API) without any conversion to form encoding. This is
+easier to validate on the backend and should be easier to extend in the future.
+
 > [!CAUTION]
-> The system is streaming file DOWNLOAD but is not streaming file UPLOAD.
+> The system is streaming file DOWNLOAD but is not streaming file UPLOAD. THIS IS A BUG UNDER ACTIVE INVESTIGATION
 
 Stream API does not support stream reading `FormData` and therefore no efficient method to do so has been found.
 Manually processing the stream is a complex task that may only be worth the effort if files are very large, to prevent
@@ -189,6 +192,10 @@ standard `cache-control: max-age=N, public` header to be then handled by any fro
 > or accept raw keys as the public URL as browsers fully support reading files without extension. Furthermore, the
 > function provides the `content-type` header. this may only become a problem if some strange SEO policies are taking
 > into account the file extension (but is unlikely).
+
+Temporary uploads can be implemented by uploading all files to a fixed prefix key (like `tmp/`) and then moved to the
+final key after the user confirms the operation. To properly achieve so an Object Lifecycle Rule should be added to the
+R2 configuration to properly clean the files after they have been abandoned for some time.
 
 ### 🚧 Signed URLs
 
